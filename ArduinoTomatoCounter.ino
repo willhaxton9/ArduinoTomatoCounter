@@ -12,6 +12,7 @@ volatile long echo_start = 0;
 volatile long echo_end = 0;
 volatile long echo_duration = 0;
 volatile int trigger_time_count = 0;
+volatile long distance;
 
 int counter = 0;            // still needed??
 int currentState = 0;
@@ -21,7 +22,7 @@ void setup() {
   lcd.init();
   lcd.backlight();
   // Can it be faster? 115200 or 38400
-  Serial.begin(9600);
+  Serial.begin(38400);
   lcd.begin(16,2);
   lcd.setCursor(0,0);
   lcd.print("Count No : ");
@@ -30,7 +31,7 @@ void setup() {
   pinMode(echoPin, INPUT);
   Timer1.initialize(TIMER_US);
   Timer1.attachInterrupt( timerIsr );
-  attachInterrupt(echo_int, echo_interrupt, CHANGE)
+  attachInterrupt(echo_int, echo_interrupt, CHANGE);
 }
 
 // May need to monitor and record the distance (wave) first.
@@ -43,7 +44,7 @@ void loop() {
 // Does it have to be done every time before reading the sensor output?
 // Check Arduino interrupt
 // Try put this getDistance() into attachInterrupt()  
-  getDistance = (echo_duration/2) / 29.1;
+  distance = (echo_duration/2) / 29.1;
   if (distance <= 20){
     currentState = 1;
   }
