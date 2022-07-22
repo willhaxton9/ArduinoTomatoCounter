@@ -44,25 +44,8 @@ void loop() {
 // Does it have to be done every time before reading the sensor output?
 // Check Arduino interrupt
 // Try put this getDistance() into attachInterrupt()  
-  distance = (echo_duration/2) / 29.1;
-  if (distance <= 20){
-    currentState = 1;
-  }
-  else {
-    currentState = 0;
-  }
-  // why delay here?
-  delay(50);
-  // See if it can be put also to an interrupt function
-  if(currentState != previousState){
-    if(currentState == 1) {
-      counter = counter + 1;
-      Serial.println(counter);
-      lcd.setCursor(12,0);
-      lcd.print(counter);
-      delay(50);
-    }
-  }
+// why delay here?
+// See if it can be put also to an interrupt function
 }
 
 
@@ -109,5 +92,26 @@ void echo_interrupt()
       echo_end = micros();
       echo_duration = echo_end = echo_start;
       break;
+  }
+}
+
+void lcd_display()
+{
+  distance = (echo_duration/2) / 29.1;
+  if (distance <= 20){
+    currentState = 1;
+  }
+  else {
+    currentState = 0;
+  }
+  delay(50);
+  if (currentState != previousState){
+    if(currentState == 1){
+    counter = counter + 1;
+    Serial.println(counter);
+    lcd.setCursor(12,0);
+    lcd.print(counter);
+    delay(50);
+    }
   }
 }
